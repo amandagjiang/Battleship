@@ -100,6 +100,23 @@ class Battleship:
                 return (True,row,col)           
         self._board[row][col] = self.ALREADY_SHOT
         return (False,row,col)
+    
+    def move(self,row, col):
+        if self._board[row][col] == self.OPPONENT:
+            self._board[row][col] = self.HIT
+            self.opponent_lives -= 1
+        elif self._board[row][col] == self.EMPTY:
+            self._board[row][col] = self.ALREADY_SHOT
+        elif self._board[row][col] == self.HIT or self._board[row][col] == self.ALREADY_SHOT:
+            raise BattleshipError
+        elif self._board[row][col] == self.PLAYER:
+            raise BattleshipError
+            
+    def convert_coordinate(self,point):
+        col, row = point.strip()
+        row = int(row)-1
+        col = self.letter_to_number(col)
+        return (row,col)
         
     def _add_surrounding_targets(self, row,col):
         nesw = [(row-1,col), (row,col+1), (row+1,col), (row,col-1)]
@@ -184,25 +201,9 @@ class Battleship:
             if self._check_ship(points):
                 self.place_ship(points, True)
                 break
-        
-    def convert_coordinate(self,point):
-        col, row = point.strip()
-        row = int(row)-1
-        col = self.letter_to_number(col)
-        return (row,col)
      
-    # Battleship Console Functions
+    # Game Logic Testing
     
-    def move(self,row, col):
-        if self._board[row][col] == self.OPPONENT:
-            self._board[row][col] = self.HIT
-            self.opponent_lives -= 1
-        elif self._board[row][col] == self.EMPTY:
-            self._board[row][col] = self.ALREADY_SHOT
-        elif self._board[row][col] == self.HIT or self._board[row][col] == self.ALREADY_SHOT:
-            raise BattleshipError
-        elif self._board[row][col] == self.PLAYER:
-            raise BattleshipError
     '''        
     def run(self):
         print('Welcome to the game of Battleship!')
